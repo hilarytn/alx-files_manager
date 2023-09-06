@@ -1,15 +1,33 @@
-import express from 'express';
-import router from './routes/index';
+import { Router } from 'express';
+import AppController from '../controllers/AppController';
+import UsersController from '../controllers/UsersController';
+import AuthController from '../controllers/AuthController';
+import FilesController from '../controllers/FilesController';
 
-const port = parseInt(process.env.PORT, 10) || 5000;
+const router = Router();
 
-const app = express();
+router.get('/status', AppController.getStatus);
 
-app.use(express.json());
-app.use('/', router);
+router.get('/stats', AppController.getStats);
 
-app.listen(port, () => {
-  console.log(`server running on port ${port}`);
-});
+router.post('/users', UsersController.postNew);
 
-export default app;
+router.get('/connect', AuthController.getConnect);
+
+router.get('/disconnect', AuthController.getDisconnect);
+
+router.get('/users/me', UsersController.getMe);
+
+router.post('/files', FilesController.postUpload);
+
+router.get('/files/:id', FilesController.getShow);
+
+router.get('/files', FilesController.getIndex);
+
+router.put('/files/:id/publish', FilesController.putPublish);
+
+router.put('/files/:id/unpublish', FilesController.putUnpublish);
+
+router.get('/files/:id/data', FilesController.getFile);
+
+module.exports = router;
